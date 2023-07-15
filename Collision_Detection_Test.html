@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Collision Detection Test</title>
+    <style>
+      #game-board {
+        width: 400px;
+        height: 300px;
+        border: 1px solid black;
+        position: relative;
+      }
+      .player {
+        width: 50px;
+        height: 50px;
+        background-color: blue;
+        position: absolute;
+        top: 125px;
+        left: 50px;
+        transition: background-color 0.3s ease;
+      }
+      .obstacle {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        position: absolute;
+        top: 100px;
+        left: 250px;
+        transition: display 0.3s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Collision Detection Test</h1>
+    <div id="game-board">
+      <div class="player"></div>
+      <div class="obstacle"></div>
+    </div>
+
+    <script>
+      var player = document.querySelector(".player");
+      var obstacle = document.querySelector(".obstacle");
+      var hasCollision = false;
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "ArrowUp") {
+          movePlayer("up");
+        } else if (event.key === "ArrowDown") {
+          movePlayer("down");
+        } else if (event.key === "ArrowLeft") {
+          movePlayer("left");
+        } else if (event.key === "ArrowRight") {
+          movePlayer("right");
+        }
+      });
+
+      function movePlayer(direction) {
+        var playerRect = player.getBoundingClientRect();
+        var obstacleRect = obstacle.getBoundingClientRect();
+
+        if (
+          !hasCollision &&
+          playerRect.right > obstacleRect.left &&
+          playerRect.left < obstacleRect.right &&
+          playerRect.bottom > obstacleRect.top &&
+          playerRect.top < obstacleRect.bottom
+        ) {
+          obstacle.style.display = "none";
+          player.style.backgroundColor = "yellow";
+          hasCollision = true;
+        } else {
+          if (direction === "up") {
+            player.style.top = playerRect.top - 10 + "px";
+          } else if (direction === "down") {
+            player.style.top = playerRect.top + 10 + "px";
+          } else if (direction === "left") {
+            player.style.left = playerRect.left - 10 + "px";
+          } else if (direction === "right") {
+            player.style.left = playerRect.left + 10 + "px";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
