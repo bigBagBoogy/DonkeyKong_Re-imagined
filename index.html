@@ -35,7 +35,7 @@
         position: absolute;
         z-index: 0; /* Add this line to set a lower stacking order */
       }
-      .object {
+      .coin {
         width: 60px;
         height: 60px;
         background-image: url(images/coin.gif);
@@ -62,7 +62,7 @@
       <div class="floor" style="left: 0px; bottom: 97px"></div>
       <div class="floor" style="left: 0px; bottom: 200px"></div>
       <div class="floor" style="left: 0px; bottom: 302px"></div>
-      <div class="object" style="left: 700px; bottom: 330px"></div>
+      <div class="coin" style="left: 700px; bottom: 330px"></div>
     </div>
 
     <script>
@@ -111,6 +111,7 @@
 
         if (direction === "up") {
           var isOnLadder = false;
+          checkCollision();
           for (var i = 0; i < ladders.length; i++) {
             var ladder = ladders[i];
             if (isColliding(player, ladder)) {
@@ -124,6 +125,7 @@
           }
         } else if (direction === "down") {
           var isOnLadderBelow = false;
+          checkCollision();
           for (var i = 0; i < ladders.length; i++) {
             var ladder = ladders[i];
             if (
@@ -143,10 +145,12 @@
         } else if (direction === "left") {
           if (playerLeft > 0) {
             player.style.left = playerLeft - 10 + "px";
+            checkCollision();
           }
         } else if (direction === "right") {
           if (playerLeft < gameBoardWidth - playerWidth) {
             player.style.left = playerLeft + 10 + "px";
+            checkCollision();
           }
         }
       }
@@ -157,28 +161,20 @@
 
       function checkCollision() {
         var player = document.querySelector(".player");
-        var objects = document.querySelectorAll(".object");
+        var coins = document.querySelectorAll(".coin");
         var playerRect = player.getBoundingClientRect();
-        var playerLeft = playerRect.left;
-        var playerRight = playerRect.right;
-        var playerTop = playerRect.top;
-        var playerBottom = playerRect.bottom;
 
-        for (var i = 0; i < objects.length; i++) {
-          var object = objects[i];
-          var objectRect = object.getBoundingClientRect();
-          var objectLeft = objectRect.left;
-          var objectRight = objectRect.right;
-          var objectTop = objectRect.top;
-          var objectBottom = objectRect.bottom;
+        for (var i = 0; i < coins.length; i++) {
+          var coin = coins[i];
+          var coinRect = coin.getBoundingClientRect();
 
           if (
-            playerLeft < objectRight &&
-            playerRight > objectLeft &&
-            playerTop < objectBottom &&
-            playerBottom > objectTop
+            playerRect.left < coinRect.right &&
+            playerRect.right > coinRect.left &&
+            playerRect.top < coinRect.bottom &&
+            playerRect.bottom > coinRect.top
           ) {
-            object.style.display = "none"; // Hide the object
+            coin.style.visibility = "hidden"; // Hide the coin
             player.classList.add("invert-colors"); // Add a CSS class to invert player colors
             return;
           }
