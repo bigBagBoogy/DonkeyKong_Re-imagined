@@ -1,5 +1,13 @@
 # Donkey Kong Re-Imagined!
 
+# instant push copy paste all below in one go:
+
+git init
+git branch -M main
+git add .
+git commit -m "update"
+git push -u origin main
+
 push up to github reminder:
 git init
 git branch -M main
